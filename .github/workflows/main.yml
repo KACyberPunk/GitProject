@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2              
       - name: Write the token into a file
+        shell: bash
         run: 'echo ${{ secrets.DEVHUB_TOKEN}} > ./token.txt'
       - name: Install Salesforce CLI
         run: |
