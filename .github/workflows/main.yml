@@ -21,9 +21,5 @@ jobs:
           ./sfdx-cli/install
       - name: Auth with the DevHub
         run: 'sfdx auth:sfdxurl:store --sfdxurlfile=./token.txt -a DevHub -d'
-      - name: Push source
-        run: 'sfdx force:source:push -u DevHub'
-      - name: List orgs
-        run: 'sfdx force:org:list'
-      - name: Run tests
-        run: 'sfdx force:apex:test:run -u DevHub --resultformat human'
+      - name: 'Deploy'
+        run: "sfdx force:source:deploy --sourcepath ./force-app/main/default -l RunLocalTests -u DevHub"
