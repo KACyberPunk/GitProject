@@ -1,0 +1,26 @@
+
+name: 'sfdx'
+
+on: 
+  push:
+    branches: [ master ]
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master             
+      - name: Write the token into a file
+        shell: bash
+        run: 'echo ${{ secrets.DEVHUB_TOKEN}} > ./token.txt'
+      - name: Install Salesforce CLI
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+          mkdir sfdx-cli
+          tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
+          ./sfdx-cli/install
+      - name: Auth with the DevHub
+        run: 'sfdx auth:sfdxurl:store --sfdxurlfile=./token.txt -a DevHub -d'
+      - name: 'Deploy'
+        run: "sfdx force:source:deploy --sourcepath ./force-app/main/default -u DevHub"
